@@ -13,6 +13,11 @@ import Class.Packet;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JLabel;
 
@@ -29,7 +34,8 @@ public class GuiPacket extends JPanel {
 				try {
 					JFrame b = new JFrame();
 					GuiPacket JPanel = new GuiPacket(new Packet("phan", "phjfl", "jlskadjf", "Jlkjsf", null, null));
-		
+					
+					
 					b.getContentPane().add(JPanel);
 					b.setVisible(true);
 					b.setSize(500,500);
@@ -67,5 +73,8 @@ public class GuiPacket extends JPanel {
 		this.setVisible(true);
 		
 	}
+
+
+
 
 }

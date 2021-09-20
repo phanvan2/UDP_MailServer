@@ -1,6 +1,9 @@
 package Class;
 
-public class Packet {
+import java.io.Serializable;
+
+public class Packet implements Serializable {
+	private int define_require; 
 	private String name; 
 	private String title ; 
 	private String date ; 
@@ -13,6 +16,16 @@ public class Packet {
 	}
 	public Packet(String name, String title, String date, String content, String file, String fileImage) {
 		super();
+		this.name = name;
+		this.title = title;
+		this.date = date;
+		this.content = content;
+		File = file;
+		FileImage = fileImage;
+	}
+	public Packet(int define_require, String name, String title, String date, String content, String file, String fileImage) {
+		super();
+		this.define_require = define_require; 
 		this.name = name;
 		this.title = title;
 		this.date = date;
@@ -55,6 +68,12 @@ public class Packet {
 	}
 	public void setFileImage(String fileImage) {
 		FileImage = fileImage;
+	}
+	public int getDefine_require() {
+		return define_require;
+	}
+	public void setDefine_require(int define_require) {
+		this.define_require = define_require;
 	} 
 	
 }
