@@ -9,7 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
-
+import Class.Packet;
+import constant.Constant;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,8 +29,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.rmi.Naming;
 import java.security.MessageDigest;
 
@@ -39,7 +45,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 
-
+ 
 public class GuiRegister extends JFrame implements FocusListener {
 
 	private JPanel contentPane;
@@ -79,7 +85,7 @@ public class GuiRegister extends JFrame implements FocusListener {
 		setContentPane(contentPane);
 		
 		try {// set icon giao dien---------------------------
-			Image iconmes = ImageIO.read(new File("D:\\download\\logo_rmi2.jpg"));
+			Image iconmes = ImageIO.read(new File("image\\logoMail.jpg"));
 			this.setIconImage(iconmes); 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -280,7 +286,24 @@ public class GuiRegister extends JFrame implements FocusListener {
 					String password = txtPassword.getText();
 					String confirm_password = txtCofirmPassword.getText(); 
 					if( !username.equals("") && !password.equals("") && confirm_password.equals(password)) {
-						 
+						
+						try {
+							DatagramSocket clientSocket = new DatagramSocket();
+							InetAddress IPAddress = InetAddress.getByName("localhost");
+							byte[] sendData = new byte[1024];
+							Packet packet = new Packet(new Constant().DEFINE_REQUIRE_REGISTER , 
+														username + "" + new Constant().SPLIT_S +"" +password , "", "","",  null, null ); 
+						     sendData = serialize((Object) packet); 
+
+							DatagramPacket sendPacket = 
+							            new DatagramPacket(sendData, sendData.length, IPAddress, new Constant().PORT);
+	
+							clientSocket.send(sendPacket);
+							clientSocket.close();
+						} catch (Exception ex) {
+							// TODO Auto-generated catch block
+							ex.printStackTrace();
+						}//
 					}else {
 						JOptionPane.showMessageDialog(null, "Mời bạn nhập lại!"); 
 						txtPassword.setText("");
@@ -375,4 +398,10 @@ public class GuiRegister extends JFrame implements FocusListener {
 		}
 	
 	}
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        return out.toByteArray();
+    }
 }
