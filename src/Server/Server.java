@@ -69,7 +69,7 @@ public class Server {
 			int require = packet_receive.getDefine_require(); 
 			
 			if( require == constant.DEFINE_REQUIRE_LOGIN ) {
-				
+				loginServer(packet_receive.getName());
 			}
 			if( require == constant.DEFINE_REQUIRE_REGISTER) {
 				registerServer(packet_receive.getName());
@@ -83,15 +83,27 @@ public class Server {
     
     public void registerServer(String name) {
     	String[] arr = name.split(constant.SPLIT_S);
-    	System.out.println(arr.length); 
+    	//System.out.println(arr.length); 
     	if( !handleFile.checkFileExist(constant.LINK_PATH_SERVER +"" + arr[0])) {
     		handleFile.CreateDirectory(constant.LINK_PATH_SERVER, arr[0]);
     		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "newEmail.txt");
+    		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\newEmail.txt", "Thank you for using this service. we hope that you will feel comfortabl........");
+    		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "pass.txt");
+    		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\pass.txt", arr[1]);
     	}
     	
     }
-    public void loginServer() {
-    	
+    public void loginServer(String name) {
+    	String[] arr = name.split(constant.SPLIT_S);
+    	if( handleFile.checkFileExist(constant.LINK_PATH_SERVER +"" + arr[0])) {
+    		if( arr[1].equals(handleFile.readFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\pass.txt"))) {
+    			System.out.println("login thành công");
+    		}else {
+    			System.out.println("login thất bại");
+    		}
+    	}else {
+    		System.out.println("User or password incorrect! :(");
+    	}
     }
 
     

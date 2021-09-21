@@ -64,32 +64,31 @@ public class HandleFile {
 		}
     }
     
-    public void readFile(String path) {
+    public String readFile(String path) {
     	 BufferedReader br = null;
+    	 String content = ""; 
     	 if(!checkFileExist(path)) {
     		 System.out.println("file ko tồn tại");
+    		 return null ; 
     	 }else {
 	         try {   
 	             br = new BufferedReader(new FileReader(path));       
 	             int num=0;
 	             char ch;
-	
 	             while((num = br.read()) != -1)
 	             {    
 	                 ch = (char) num;
-	                 System.out.print(ch);
+	                 content = content + "" + ch ; 
 	             }
 	         }catch(Exception e) {
 	        	 System.out.println(e.getMessage());
 	         }
     	 }
+    	 return content ; 
     }
     public boolean checkFileExist(String path) {
 	  	File file = new File(path);
-	  	if( file.exists() ) {
-	  		return true ; 
-	  	}
-    	return false ; 
+	  	return file.exists();  
     }
 
 }
