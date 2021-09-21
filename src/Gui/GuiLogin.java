@@ -219,7 +219,7 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 				InetAddress IPAddress = InetAddress.getByName("localhost");
 				byte[] sendData = new byte[1024];
 				Packet packet = new Packet(new Constant().DEFINE_REQUIRE_LOGIN , 
-											txtUsername.getText() + "" + new Constant().SPLIT_S +"" + scryptWithMD5(txtPassword.getText()) , "", "","",  null, null ); 
+											txtUsername.getText() + "" + new Constant().SPLIT_S +"" + scryptWithMD5(txtPassword.getText()),"" , "", "","",  null, null ); 
 			     sendData = serialize((Object) packet); 
 
 				DatagramPacket sendPacket = 
@@ -227,6 +227,8 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 
 				clientSocket.send(sendPacket);
 				clientSocket.close();
+				new GuiClient(txtUsername.getText()).setVisible(true);
+				this.setVisible(false);
 			} catch (Exception ex) {
 				// TODO Auto-generated catch block
 				ex.printStackTrace();

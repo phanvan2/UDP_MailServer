@@ -4,7 +4,8 @@ import java.io.Serializable;
 
 public class Packet implements Serializable {
 	private int define_require; 
-	private String name; 
+	private String name_send; 
+	private String name_recerive;
 	private String title ; 
 	private String date ; 
 	private String content; 
@@ -14,31 +15,28 @@ public class Packet implements Serializable {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public Packet(String name, String title, String date, String content, String file, String fileImage) {
+	public Packet(String name_send, String name_recerive, String title, String date, String content, String file, String fileImage) {
 		super();
-		this.name = name;
+		this.name_send = name_send;
+		this.name_recerive = name_recerive; 
 		this.title = title;
 		this.date = date;
 		this.content = content;
 		File = file;
 		FileImage = fileImage;
 	}
-	public Packet(int define_require, String name, String title, String date, String content, String file, String fileImage) {
+	public Packet(int define_require, String name_send, String name_receive, String title, String date, String content, String file, String fileImage) {
 		super();
 		this.define_require = define_require; 
-		this.name = name;
+		this.name_send = name_send;
+		this.name_recerive = name_receive; 
 		this.title = title;
 		this.date = date;
 		this.content = content;
 		File = file;
 		FileImage = fileImage;
 	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+
 	public String getTitle() {
 		return title;
 	}
@@ -74,6 +72,19 @@ public class Packet implements Serializable {
 	}
 	public void setDefine_require(int define_require) {
 		this.define_require = define_require;
-	} 
+	}
+	public String getName_send() {
+		return name_send;
+	}
+	public void setName_send(String name_send) {
+		this.name_send = name_send;
+	}
+	public String getName_recerive() {
+		return name_recerive;
+	}
+	public void setName_recerive(String name_recerive) {
+		this.name_recerive = name_recerive;
+	}
+	
 	
 }
