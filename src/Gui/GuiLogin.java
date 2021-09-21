@@ -9,6 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import Class.Packet;
+import constant.Constant;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,9 +25,14 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.rmi.Naming;
 import java.security.MessageDigest;
 import java.sql.ResultSet;
@@ -71,7 +79,7 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
 		try {// set icon giao dien---------------------------
-			Image iconmes = ImageIO.read(new File("D:\\download\\logo_rmi2.jpg"));
+			Image iconmes = ImageIO.read(new File(new Constant().LINK_PATH_IMAGE + "logoMail.jpg"));
 			this.setIconImage(iconmes); 
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -137,10 +145,10 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 		panel.add(lbIconPassword);
 		
 		try {
-			BufferedImage bufferImage = ImageIO.read(new File("D:\\download\\eye-look.png"));
+			BufferedImage bufferImage = ImageIO.read(new File(new Constant().LINK_PATH_IMAGE +"eye-look.png"));
 			imageIcon_show = new ImageIcon(bufferImage.getScaledInstance(21, 15, Image.SCALE_SMOOTH));
 			
-			BufferedImage bufferImage_hidden = ImageIO.read(new File("D:\\download\\hide-private-hidden.png"));
+			BufferedImage bufferImage_hidden = ImageIO.read(new File(new Constant().LINK_PATH_IMAGE+ "hide-private-hidden.png"));
 			imageIcon_hidden = new ImageIcon(bufferImage_hidden.getScaledInstance(21, 15, Image.SCALE_SMOOTH));
 			lbIconPassword.setIcon(imageIcon_hidden);
 			
@@ -206,7 +214,23 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getActionCommand().equals("Login")) {
-			
+			try {
+				DatagramSocket clientSocket = new DatagramSocket();
+				InetAddress IPAddress = InetAddress.getByName("localhost");
+				byte[] sendData = new byte[1024];
+				Packet packet = new Packet(new Constant().DEFINE_REQUIRE_LOGIN , 
+											txtUsername.getText() + "" + new Constant().SPLIT_S +"" + scryptWithMD5(txtPassword.getText()) , "", "","",  null, null ); 
+			     sendData = serialize((Object) packet); 
+
+				DatagramPacket sendPacket = 
+				            new DatagramPacket(sendData, sendData.length, IPAddress, new Constant().PORT);
+
+				clientSocket.send(sendPacket);
+				clientSocket.close();
+			} catch (Exception ex) {
+				// TODO Auto-generated catch block
+				ex.printStackTrace();
+			}//
 		}
 	}
 	
@@ -269,5 +293,11 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 			}
 		}
 	}
+    public static byte[] serialize(Object obj) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ObjectOutputStream os = new ObjectOutputStream(out);
+        os.writeObject(obj);
+        return out.toByteArray();
+    }
 	
 }
