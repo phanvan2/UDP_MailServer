@@ -33,7 +33,7 @@ public class GuiPacket extends JPanel {
 			public void run() {
 				try {
 					JFrame b = new JFrame();
-					GuiPacket JPanel = new GuiPacket(new Packet("phan", "phjfl", "jlskadjf", "Jlkjsf", null, null));
+					GuiPacket JPanel = new GuiPacket(new Packet("phan","",  "phjfl", "jlskadjf", "Jlkjsf", null, null));
 					
 					
 					b.getContentPane().add(JPanel);
@@ -57,7 +57,7 @@ public class GuiPacket extends JPanel {
 		
 		JLabel lblName = new JLabel("Phan V\u0102n PH\u00F9ng");
 		contentPane.add(lblName);
-		lblName.setText(packet.getName());
+		lblName.setText(packet.getName_send());
 		
 		JLabel lblTitle = new JLabel("v\u1EAFn b\u1EA3n n\u00E0y d\u00F9ng \u0111\u1EC3 text");
 		lblTitle.setAlignmentX(5000);

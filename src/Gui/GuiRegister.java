@@ -292,7 +292,7 @@ public class GuiRegister extends JFrame implements FocusListener {
 							InetAddress IPAddress = InetAddress.getByName("localhost");
 							byte[] sendData = new byte[1024];
 							Packet packet = new Packet(new Constant().DEFINE_REQUIRE_REGISTER , 
-														username + "" + new Constant().SPLIT_S +"" +scryptWithMD5(password) , "", "","",  null, null ); 
+														username + "" + new Constant().SPLIT_S +"" +scryptWithMD5(password) ,"", "", "","",  null, null ); 
 						     sendData = serialize((Object) packet); 
 
 							DatagramPacket sendPacket = 

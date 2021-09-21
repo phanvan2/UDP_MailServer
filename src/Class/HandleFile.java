@@ -7,11 +7,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
+import constant.Constant;
+
 public class HandleFile {
 
+	Constant constant = new Constant();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		new HandleFile().readFile("src\\Gui\\GuiClient.java");
+		//new HandleFile().readFile("src\\Gui\\GuiClient.java");
 	}
 	
 	
@@ -52,8 +55,10 @@ public class HandleFile {
 	
     public void writeFile(String path, String content) {
     	try {
+    		String s = readFile(path); 
+    		
 			FileOutputStream file = new FileOutputStream(path);
-			String string = content;
+			String string = s + content;
 			byte[] a = string.getBytes(); // ep kieu String ve mang byte
 		
 			file.write(a); // ghi mang byte vao file
@@ -78,6 +83,7 @@ public class HandleFile {
 	             while((num = br.read()) != -1)
 	             {    
 	                 ch = (char) num;
+	                // System.out.println(ch); 
 	                 content = content + "" + ch ; 
 	             }
 	         }catch(Exception e) {
@@ -86,6 +92,13 @@ public class HandleFile {
     	 }
     	 return content ; 
     }
+    
+    public void createAndWriteFile(String path,String nameFile, String content) {
+    	if(!checkFileExist(path + nameFile+".txt" ))
+			createFile(path, nameFile+".txt");
+		writeFile(path + nameFile+".txt", content); 
+    }
+    
     public boolean checkFileExist(String path) {
 	  	File file = new File(path);
 	  	return file.exists();  

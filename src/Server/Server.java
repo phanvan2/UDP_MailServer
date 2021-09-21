@@ -69,10 +69,13 @@ public class Server {
 			int require = packet_receive.getDefine_require(); 
 			
 			if( require == constant.DEFINE_REQUIRE_LOGIN ) {
-				loginServer(packet_receive.getName());
+				loginServer(packet_receive.getName_send());
 			}
 			if( require == constant.DEFINE_REQUIRE_REGISTER) {
-				registerServer(packet_receive.getName());
+				registerServer(packet_receive.getName_send());
+			}
+			if( require == constant.DEFINE_REQUIRE_SENDMAIL) {
+				receiveAndSendMail(packet_receive);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -90,6 +93,8 @@ public class Server {
     		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\newEmail.txt", "Thank you for using this service. we hope that you will feel comfortabl........");
     		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "pass.txt");
     		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\pass.txt", arr[1]);
+    		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "me.txt");
+
     	}
     	
     }
@@ -106,6 +111,19 @@ public class Server {
     	}
     }
 
+    
+    public void receiveAndSendMail(Packet packet) {
+    	if( !handleFile.checkFileExist( constant.LINK_PATH_SERVER + "" + packet.getName_recerive()) ) {
+    		System.out.println("Không tồn tại tài khoản này: " + constant.LINK_PATH_SERVER + "" + packet.getName_recerive());
+    	}else {
+    		String content = packet.getName_send()+ constant.SPLIT_S + packet.getName_recerive() + constant.SPLIT_S
+    				+ packet.getContent()+ constant.SPLIT_S + packet.getDate() + constant.SPLIT_S + packet.getTitle() ; 
+    		handleFile.createAndWriteFile(constant.LINK_PATH_SERVER + packet.getName_recerive() + "\\", packet.getName_send(), content+  "\r\n");
+    		handleFile.createAndWriteFile(constant.LINK_PATH_SERVER + packet.getName_send() + "\\", "me", content+  "\r\n");
+    		
+    	}
+    }
+    
     
     public static byte[] serialize(Object obj) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
