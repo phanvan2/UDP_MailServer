@@ -17,13 +17,17 @@ public class Client {
 	byte[] sendData = new byte[1024];
 	byte[] receiveData = new byte[1024];
 	InetAddress IPAddress ; 
-	int PORT = new Constant().PORT; 
+	int port_client ; 
+	int PORT = new Constant().PORT_SERVER; 
 	String nameSend  ; 
+	DatagramPacket receivePacket ;
 	public Client(String nameSend) {
 		this.nameSend = nameSend ; 
 		try {
-			clientSocket = new DatagramSocket();
+			int  p = Integer.parseInt(new HandleFile().readFile("server_DB\\"+ nameSend+"\\infor.txt"));
+			clientSocket = new DatagramSocket(p);
 			IPAddress = InetAddress.getByName("localhost");
+			receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -34,6 +38,7 @@ public class Client {
 		try {
 			clientSocket = new DatagramSocket();
 			IPAddress = InetAddress.getByName("localhost");
+			receivePacket = new DatagramPacket(receiveData, receiveData.length);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -47,7 +52,7 @@ public class Client {
 			            new DatagramPacket(sendData, sendData.length, IPAddress, PORT);
 			clientSocket.send(sendPacket);
 			Packet packet1 = (Packet) deserialize(sendData); 
-			System.out.println(packet1.getName_recerive());
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -56,8 +61,7 @@ public class Client {
 	public Packet receiveMess() {
 		
 		try {
-			DatagramPacket receivePacket = 
-				new DatagramPacket(receiveData, receiveData.length);
+		
 	
 			clientSocket.receive(receivePacket);
 			Object obj_receive = deserialize(receivePacket.getData()) ; 
@@ -95,5 +99,6 @@ public class Client {
         ObjectInputStream is = new ObjectInputStream(in);
         return is.readObject();
     }
+
 
 }
