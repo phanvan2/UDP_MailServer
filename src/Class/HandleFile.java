@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.Vector;
 
 import constant.Constant;
 
@@ -14,7 +15,10 @@ public class HandleFile {
 	Constant constant = new Constant();
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		//new HandleFile().readFile("src\\Gui\\GuiClient.java");
+		int  p = Integer.parseInt(new HandleFile().readFile("server_DB\\"+"phan\\"+"infor.txt"));
+		System.out.println(p);
+		//Vector<Packet> packet = new HandleFile().parseFile("server_DB\\van\\phan.txt");
+		//System.out.println(packet.get(0).getName_recerive()); 
 	}
 	
 	
@@ -43,7 +47,7 @@ public class HandleFile {
     	File file = new File(path + "\\" + nameFile);
     	try {
 			if( file.createNewFile()) {
-				System.out.println("Tạo file thành côcng");
+			//	System.out.println("Tạo file thành côcng");
 			}else {
 				System.out.println("lỗi rồi ");
 			}
@@ -62,7 +66,7 @@ public class HandleFile {
 			byte[] a = string.getBytes(); // ep kieu String ve mang byte
 		
 			file.write(a); // ghi mang byte vao file
-			System.out.print("Da ghi thanh cong!");
+			//System.out.print("Da ghi thanh cong!");
 			file.close();
 		} catch (Exception e2) {
 			System.out.print(e2);// In lỗi ra màn hình
@@ -73,7 +77,7 @@ public class HandleFile {
     	 BufferedReader br = null;
     	 String content = ""; 
     	 if(!checkFileExist(path)) {
-    		 System.out.println("file ko tồn tại");
+    	//	 System.out.println("file ko tồn tại");
     		 return null ; 
     	 }else {
 	         try {   
@@ -102,6 +106,39 @@ public class HandleFile {
     public boolean checkFileExist(String path) {
 	  	File file = new File(path);
 	  	return file.exists();  
+    }
+    
+    public Vector<Packet> parseFile(String path) {
+    	Vector<Packet> packet = new Vector<Packet>(); 
+    	BufferedReader br = null;
+    	 if(!checkFileExist(path)) {
+    	//	 System.out.println("file ko tồn tại");
+    		 return null ; 
+    	 }else {
+	         try {   
+	             br = new BufferedReader(new FileReader(path));       
+	             int num=0;
+	             String content =""; 
+	             char ch;
+	             while((num = br.read()) != -1)
+	             {    
+	            	 if(num == 13 || num == 0) {
+	            	    String[] s = content.split(new Constant().SPLIT_S) ;
+	            	    if( s.length > 1)
+	            	    	packet.add(new Packet(s[0], s[1], s[2], s[3] , "Jlkjsf", null, null));
+	            	    content = ""; 
+	            	 }
+	            	 else{
+		                 ch = (char) num;
+			                 content = content + "" + ch ; 
+	            	 }
+
+	             }
+	         }catch(Exception e) {
+	        	 System.out.println(e.getMessage());
+	         }
+    	 }
+    	return packet ;
     }
 
 }

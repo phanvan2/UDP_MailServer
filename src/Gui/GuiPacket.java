@@ -66,7 +66,7 @@ public class GuiPacket extends JPanel {
 		
 		JLabel lblDate = new JLabel("12/5/2001");
 		contentPane.add(lblDate);
-		lblDate.setText(packet.getDate()); 
+		lblDate.setText(packet.getContent()); 
 		
 		this.setLayout(new BorderLayout());
 		this.add(contentPane, BorderLayout.CENTER);

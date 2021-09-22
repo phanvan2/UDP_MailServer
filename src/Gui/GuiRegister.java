@@ -296,7 +296,7 @@ public class GuiRegister extends JFrame implements FocusListener {
 						     sendData = serialize((Object) packet); 
 
 							DatagramPacket sendPacket = 
-							            new DatagramPacket(sendData, sendData.length, IPAddress, new Constant().PORT);
+							            new DatagramPacket(sendData, sendData.length, IPAddress, new Constant().PORT_SERVER);
 	
 							clientSocket.send(sendPacket);
 							clientSocket.close();

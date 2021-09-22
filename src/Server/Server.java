@@ -24,9 +24,10 @@ import constant.Constant;
 
 public class Server {
 	String path = "D:\\new_email" ; 
-	DatagramSocket socket ; 
-	int port = new Constant().PORT;
+	DatagramSocket serverSocket ; 
+	int port = new Constant().PORT_SERVER;
 	byte[] byte_recerive = new byte[1024]; 
+	byte[] byte_send = new byte[1024]; 
 	DatagramPacket datagramPacket_receive ; 
 	Constant constant = new Constant();
 	HandleFile handleFile = new HandleFile();
@@ -34,7 +35,7 @@ public class Server {
 	
 
         try {
-			socket = new DatagramSocket(port); 
+			serverSocket = new DatagramSocket(port); 
 			datagramPacket_receive = new DatagramPacket(byte_recerive, byte_recerive.length); 
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
@@ -64,8 +65,9 @@ public class Server {
 
     public void receiveMail() {
     	try {
-			socket.receive(datagramPacket_receive);
-			Packet packet_receive = (Packet)deserialize(datagramPacket_receive.getData()); 
+			serverSocket.receive(datagramPacket_receive);
+			Packet packet_receive = (Packet)deserialize(datagramPacket_receive.getData());
+			
 			int require = packet_receive.getDefine_require(); 
 			
 			if( require == constant.DEFINE_REQUIRE_LOGIN ) {
@@ -75,17 +77,33 @@ public class Server {
 				registerServer(packet_receive.getName_send());
 			}
 			if( require == constant.DEFINE_REQUIRE_SENDMAIL) {
-				receiveAndSendMail(packet_receive);
+				int  p = Integer.parseInt(new HandleFile().readFile("server_DB\\"+ packet_receive.getName_recerive()+"\\infor.txt"));
+				receiveAndSendMail(packet_receive, datagramPacket_receive.getAddress(), p);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
+    public void sendMail(Packet packet, InetAddress inetAddress, int port) {
+    	try {
+			byte_send = serialize((Object) packet) ;
+	       	DatagramPacket sendPacket =   new DatagramPacket(byte_send, byte_send.length, InetAddress.getLocalHost(), port);
+	       	
+	       	//Gui dl lai cho client
+	       	serverSocket.send(sendPacket);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    	
+
+    }
     
     
     public void registerServer(String name) {
     	String[] arr = name.split(constant.SPLIT_S);
+    //	System.out.print(setPortClient());
     	//System.out.println(arr.length); 
     	if( !handleFile.checkFileExist(constant.LINK_PATH_SERVER +"" + arr[0])) {
     		handleFile.CreateDirectory(constant.LINK_PATH_SERVER, arr[0]);
@@ -93,7 +111,11 @@ public class Server {
     		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\newEmail.txt", "Thank you for using this service. we hope that you will feel comfortabl........");
     		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "pass.txt");
     		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\pass.txt", arr[1]);
+    		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "infor.txt");
+    		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\infor.txt", setPortClient()+"");
     		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "me.txt");
+    		handleFile.writeFile(constant.LINK_PATH_SERVER + "portUsed.txt", constant.SPLIT_S + setPortClient() );
+
 
     	}
     	
@@ -112,15 +134,17 @@ public class Server {
     }
 
     
-    public void receiveAndSendMail(Packet packet) {
+    public void receiveAndSendMail(Packet packet, InetAddress inetAddress, int port) {
+    	System.out.println("Nhận mail server");
+
     	if( !handleFile.checkFileExist( constant.LINK_PATH_SERVER + "" + packet.getName_recerive()) ) {
     		System.out.println("Không tồn tại tài khoản này: " + constant.LINK_PATH_SERVER + "" + packet.getName_recerive());
     	}else {
     		String content = packet.getName_send()+ constant.SPLIT_S + packet.getName_recerive() + constant.SPLIT_S
     				+ packet.getContent()+ constant.SPLIT_S + packet.getDate() + constant.SPLIT_S + packet.getTitle() ; 
-    		handleFile.createAndWriteFile(constant.LINK_PATH_SERVER + packet.getName_recerive() + "\\", packet.getName_send(), content+  "\r\n");
+    		handleFile.createAndWriteFile(constant.LINK_PATH_SERVER + packet.getName_recerive() + "\\", "sendMail", content+  "\r\n");
     		handleFile.createAndWriteFile(constant.LINK_PATH_SERVER + packet.getName_send() + "\\", "me", content+  "\r\n");
-    		
+    		sendMail(packet, inetAddress, port);
     	}
     }
     
@@ -135,5 +159,21 @@ public class Server {
         ByteArrayInputStream in = new ByteArrayInputStream(data);
         ObjectInputStream is = new ObjectInputStream(in);
         return is.readObject();
+    }
+    public int setPortClient() {
+    	int port = 0; 
+    	String[] s = handleFile.readFile(constant.LINK_PATH_SERVER + "portUsed.txt").split(constant.SPLIT_S) ; 
+    	if( s.length > 1) {
+        	do {
+        		port = (int) (Math.random() * ((9999 - 8888) + 1) + 8888); 
+        		for (String ss : s) {	
+    				if( Integer.parseInt(ss) == port ) port = 0 ; 
+    			}
+        	}while(port != 0) ; 
+    	}else {
+    		port = (int) (Math.random() * ((9999 - 8888) + 1) + 8888); 
+    	}
+
+    	return port ; 
     }
 }
