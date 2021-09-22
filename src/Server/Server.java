@@ -77,9 +77,13 @@ public class Server {
 				registerServer(packet_receive.getName_send());
 			}
 			if( require == constant.DEFINE_REQUIRE_SENDMAIL) {
-				int  p = Integer.parseInt(new HandleFile().readFile("server_DB\\"+ packet_receive.getName_recerive()+"\\infor.txt"));
+				// dòng dưới dùng để lấy cổng
+				int  p = Integer
+							.parseInt(new HandleFile()
+							.readFile("server_DB\\"+ packet_receive.getName_recerive()+"\\infor.txt"));
 				receiveAndSendMail(packet_receive, datagramPacket_receive.getAddress(), p);
 			}
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -106,6 +110,7 @@ public class Server {
     //	System.out.print(setPortClient());
     	//System.out.println(arr.length); 
     	if( !handleFile.checkFileExist(constant.LINK_PATH_SERVER +"" + arr[0])) {
+    	//	System.out.println("port ahiii"+setPortClient());
     		handleFile.CreateDirectory(constant.LINK_PATH_SERVER, arr[0]);
     		handleFile.createFile(constant.LINK_PATH_SERVER +"" + arr[0], "newEmail.txt");
     		handleFile.writeFile(constant.LINK_PATH_SERVER +"" + arr[0] + "\\newEmail.txt", "Thank you for using this service. we hope that you will feel comfortabl........");
@@ -163,16 +168,18 @@ public class Server {
     public int setPortClient() {
     	int port = 0; 
     	String[] s = handleFile.readFile(constant.LINK_PATH_SERVER + "portUsed.txt").split(constant.SPLIT_S) ; 
-    	if( s.length > 1) {
+    	//if( s.length > 1) {
         	do {
-        		port = (int) (Math.random() * ((9999 - 8888) + 1) + 8888); 
+        		port = (int) (Math.random() * ((9999 - 7777) + 1) + 7777); 
+        	//	System.out.print(port);
         		for (String ss : s) {	
+        			System.out.print(ss+"-");
     				if( Integer.parseInt(ss) == port ) port = 0 ; 
-    			}
-        	}while(port != 0) ; 
-    	}else {
-    		port = (int) (Math.random() * ((9999 - 8888) + 1) + 8888); 
-    	}
+        		}
+        	}while(port == 0) ; 
+//    	}else {
+//    		port = (int) (Math.random() * ((9999 - 8888) + 1) + 8888); 
+//    	}
 
     	return port ; 
     }
