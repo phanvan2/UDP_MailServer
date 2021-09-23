@@ -14,5 +14,6 @@ public class Constant {
 	public final int DEFINE_REQUIRE_LOGIN 		= 1 ; 
 	public final int DEFINE_REQUIRE_REGISTER 	= 2 ; 
 	public final int DEFINE_REQUIRE_SENDMAIL 	= 3 ; 
+	public final int DEFINE_REQUIRE_GETMESS	 	= 4 ; 
 	
 }
