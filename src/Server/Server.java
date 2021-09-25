@@ -77,7 +77,6 @@ public class Server {
 				registerServer(packet_receive.getName_send());
 			}
 			if( require == constant.DEFINE_REQUIRE_SENDMAIL) {
-				// dòng dưới dùng để lấy cổng
 				int  p = Integer
 							.parseInt(new HandleFile()
 							.readFile("server_DB\\"+ packet_receive.getName_recerive()+"\\infor.txt"));
@@ -173,7 +172,7 @@ public class Server {
         		port = (int) (Math.random() * ((9999 - 7777) + 1) + 7777); 
         	//	System.out.print(port);
         		for (String ss : s) {	
-        			System.out.print(ss+"-");
+        			//System.out.print(ss+"-");
     				if( Integer.parseInt(ss) == port ) port = 0 ; 
         		}
         	}while(port == 0) ; 

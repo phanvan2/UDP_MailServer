@@ -72,7 +72,7 @@ public class GuiLogin extends JFrame implements ActionListener, FocusListener {
 	public GuiLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(500, 200, 450, 300);
-		setTitle("RMI");
+		setTitle("Mail");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);

@@ -74,6 +74,7 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 	 * Create the frame.
 	 */
 	public GuiClient(String nameSend) {
+		
 		this.nameSend = nameSend ; 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 842, 567);
@@ -81,7 +82,7 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
+		setTitle("Mail");
 		
 		
 		try {// set icon giao dien---------------------------
@@ -113,7 +114,7 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 		contentPane.add(panel_1, BorderLayout.WEST);
 		panel_1.setLayout(new GridLayout(8, 1));
 		
-		 btnRefesh = new JButton("Refesh");
+		 btnRefesh = new JButton("Mess receive");
 		btnRefesh.addActionListener(this);
 		panel_1.add(btnRefesh);
 		
@@ -348,23 +349,6 @@ public class GuiClient extends JFrame implements ActionListener, FocusListener {
 }
 
 
-class ContentCell implements ListCellRenderer{
-	boolean ok = true ;
-	int index1 = -1; 
-	@Override
-	public JPanel getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,boolean cellHasFocus) {
-		// TODO Auto-generated method stub
-		Packet packet = (Packet)value;
-		JPanel panel = new JPanel();
-		JTextArea text = new JTextArea("xin àljasdlkf"); 
-		panel.add(text); 
-		return panel;
-
-	}
-	
-	
-	
-}
 
 
 

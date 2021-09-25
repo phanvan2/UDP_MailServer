@@ -78,7 +78,7 @@ public class GuiRegister extends JFrame implements FocusListener {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(500, 200, 450, 300);
 		setLocation(550, 200);
-		setTitle("RMI");
+		setTitle("Mail");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -397,7 +397,7 @@ public class GuiRegister extends JFrame implements FocusListener {
 			}
 		}
 	
-	}
+	}	
     public static byte[] serialize(Object obj) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream os = new ObjectOutputStream(out);
